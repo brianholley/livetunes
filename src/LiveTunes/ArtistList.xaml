@@ -1,0 +1,62 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="LiveTunes.ArtistList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="clr-namespace:LiveTunes"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="False" Loaded="PhoneApplicationPage_Loaded" Unloaded="PhoneApplicationPage_Unloaded">
+
+    <Grid x:Name="LayoutRoot" Background="#005999">
+        <Grid.Resources>
+            <utils:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock x:Name="ApplicationTitle" Text="livetunes" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="PageTitle" Text="artists" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ListBox Name="ArtistListBox" Margin="0,0,-12,0" ItemsSource="{Binding Artists}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Image Grid.Column="0" Name="FavoriteButton" Width="36" Height="36" VerticalAlignment="Center" Tap="FavoriteButton_Tap">
+                                <Image.Source>
+                                    <Binding Path="Favorite">
+                                        <Binding.Converter>
+                                            <utils:BoolImageSourceConverter TrueImageUrl="Images/favorite_active.png" FalseImageUrl="Images/favorite_inactive.png" />
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Image.Source>
+                            </Image>
+                            <StackPanel Grid.Column="1" Margin="0,0,0,12" Height="64">
+                                <TextBlock Text="{Binding ArtistName}" Style="{StaticResource PhoneTextLargeStyle}" />
+                                <TextBlock Text="in library" Margin="12,-8,0,0" Visibility="{Binding InLibrary, Converter={StaticResource BoolVisibilityConverter}}" Style="{StaticResource PhoneTextSubtleStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>

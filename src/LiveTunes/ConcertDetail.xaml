@@ -1,0 +1,135 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="LiveTunes.ConcertDetail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="clr-namespace:LiveTunes"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="False" Unloaded="PhoneApplicationPage_Unloaded">
+
+    <Grid x:Name="LayoutRoot" Background="#005999">
+        <Grid.Resources>
+            <utils:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+            <utils:StringVisibilityConverter x:Key="StringVisibilityConverter" />
+            <Style x:Key="HyperlinkButtonWrappingStyle" TargetType="HyperlinkButton">
+                <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMedium}" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="HyperlinkButton">
+                            <Border Background="Transparent">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver" />
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To="0.5" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="TextElement" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="TextElement">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Border Background="{TemplateBinding Background}" Margin="{StaticResource PhoneHorizontalMargin}" Padding="{TemplateBinding Padding}">
+                                    <TextBlock x:Name="TextElement" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Text="{TemplateBinding Content}" TextDecorations="Underline" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" TextWrapping="Wrap" />
+                                </Border>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock x:Name="ApplicationTitle" Text="livetunes" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="Images/favorite_active.png" Visibility="{Binding CurrentConcert.Favorite, Converter={StaticResource BoolVisibilityConverter}}" Width="48" Height="48" HorizontalAlignment="Left" />
+                <TextBlock x:Name="PageTitle" Grid.Column="1" Text="{Binding CurrentConcert.Title}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+            </Grid>
+        </StackPanel>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer>
+                <StackPanel>
+                    <StackPanel Margin="0,0,0,20" Visibility="{Binding CurrentConcert.TitleDifferentFromHeadliner, Converter={StaticResource BoolVisibilityConverter}}">
+                        <TextBlock Text="headliner"/>
+                        <TextBlock Text="{Binding CurrentConcert.Headliner.ArtistName}" Style="{StaticResource PhoneTextTitle2Style}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Margin="0,0,0,20" Visibility="{Binding CurrentConcert.ArtistNames, Converter={StaticResource StringVisibilityConverter}}">
+                        <TextBlock Text="also featuring"/>
+                        <TextBlock Text="{Binding CurrentConcert.ArtistNames}" Style="{StaticResource PhoneTextNormalStyle}"  TextWrapping="Wrap" />
+                    </StackPanel>
+                
+                    <TextBlock Text="concert start"/>
+                    <StackPanel Margin="0,0,0,20">
+                        <Border BorderBrush="White" BorderThickness="{StaticResource PhoneBorderThickness}" Padding="10">
+                            <TextBlock Text="{Binding CurrentConcert.StartTime, StringFormat=f}" />
+                        </Border>
+                    </StackPanel>
+
+                    <TextBlock Text="concert location"/>
+                    <StackPanel Margin="0,0,0,20">
+                        <Border BorderBrush="White" BorderThickness="{StaticResource PhoneBorderThickness}" Padding="10">
+                            <StackPanel>
+                                <HyperlinkButton Content="{Binding CurrentConcert.Venue.VenueName}" HorizontalAlignment="Left" Click="LocationLink_Click" Style="{StaticResource HyperlinkButtonWrappingStyle}"  />
+                                <HyperlinkButton Content="{Binding CurrentConcert.Venue.Address}" HorizontalAlignment="Left" Click="LocationLink_Click" Style="{StaticResource HyperlinkButtonWrappingStyle}"  />
+                                <HyperlinkButton Content="{Binding CurrentConcert.Venue.PhoneNumber}" HorizontalAlignment="Left" Click="PhoneLink_Click" Visibility="{Binding CurrentConcert.Venue.PhoneNumber, Converter={StaticResource StringVisibilityConverter}}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <Grid HorizontalAlignment="Center" Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Column="0" Source="Images/mapit.png" Tap="MapButton_Tap" Width="48" Height="48" />
+                        <Image Grid.Column="1" Source="{Binding FavoriteButtonImage}" Tap="FavoriteButton_Tap" Width="48" Height="48" />
+                        <Image Grid.Column="2" Source="Images/appbar.cancel.rest.png" Tap="IgnoreButton_Tap" Width="48" Height="48" />
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="map it" TextAlignment="Center" Tap="MapButton_Tap" />
+                        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding FavoriteButtonText}" TextAlignment="Center" Tap="FavoriteButton_Tap" />
+                        <TextBlock Grid.Column="2" Grid.Row="1" Text="ignore" TextAlignment="Center" Tap="IgnoreButton_Tap" />
+                    </Grid>
+
+                    <StackPanel Visibility="{Binding CurrentConcert.Description, Converter={StaticResource StringVisibilityConverter}}" Margin="0,0,0,20">
+                        <TextBlock Text="additional details" />
+                        <Border BorderBrush="White" BorderThickness="{StaticResource PhoneBorderThickness}" Padding="10">
+                            <TextBlock Text="{Binding CurrentConcert.DescriptionAsText}" TextWrapping="Wrap"/>
+                        </Border>
+                    </StackPanel>
+                    <HyperlinkButton TargetName="_blank" Content="concert website" NavigateUri="{Binding CurrentConcert.Website}" VerticalAlignment="Bottom" Visibility="{Binding CurrentConcert.Website, Converter={StaticResource StringVisibilityConverter}}"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>
