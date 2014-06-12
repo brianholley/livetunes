@@ -27,6 +27,8 @@ namespace LiveTunes
             DataContext = App.ViewModel;
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
 
+            Settings.Load();
+
 #if DEBUG || USE_TEST_ADS
             this.MainAdControl.ApplicationId = "test_client";
             this.MainAdControl.AdUnitId = "Image480_80";
@@ -49,9 +51,9 @@ namespace LiveTunes
 
             // Add the main panorama to the tombstoning service
             if (AppCache.PanoramaPageIndex != 0)
-                MainPanorama.DefaultItem = MainPanorama.Items[AppCache.PanoramaPageIndex];
+                MainPivot.SelectedIndex = AppCache.PanoramaPageIndex;
             AppCache.PanoramaPageIndex = 0;
-            TombstoningService.PushPanorama(MainPanorama, (int index) => { AppCache.PanoramaPageIndex = index; });
+            TombstoningService.PushPivot(MainPivot, (int index) => { AppCache.PanoramaPageIndex = index; });
 
             // Add the all concerts list box to the tombstoning service - we never need to pop this (we'll always serialize that scroll pos)
             if (AppCache.AllConcertsListScrollPos != 0)

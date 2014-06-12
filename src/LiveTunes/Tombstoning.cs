@@ -33,6 +33,18 @@ namespace LiveTunes
         }
         #endregion
 
+        #region Pivot
+        public static void PushPivot(Pivot pivot, Action<int> actionOnTombstone)
+        {
+            PivotsToSerialize[pivot] = actionOnTombstone;
+        }
+
+        public static void PopPivot(Pivot pivot)
+        {
+            PivotsToSerialize.Remove(pivot);
+        }
+        #endregion
+
         public static void Serialize()
         {
             foreach (var listBox in ListBoxesToSerialize.Keys)
@@ -44,9 +56,14 @@ namespace LiveTunes
             {
                 PanoramasToSerialize[panorama](panorama.SelectedIndex);
             }
+            foreach (var pivot in PivotsToSerialize.Keys)
+            {
+                PivotsToSerialize[pivot](pivot.SelectedIndex);
+            }
         }
 
         private static Dictionary<ListBox, Action<double>> ListBoxesToSerialize = new Dictionary<ListBox,Action<double>>();
         private static Dictionary<Panorama, Action<int>> PanoramasToSerialize = new Dictionary<Panorama, Action<int>>();
+        private static Dictionary<Pivot, Action<int>> PivotsToSerialize = new Dictionary<Pivot, Action<int>>();
     }
 }
