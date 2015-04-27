@@ -39,9 +39,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="mscorlib.Extensions">
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v4.0\Profile\WindowsPhone71\mscorlib.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -67,9 +64,9 @@
     <Compile Include="VenueItemTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LiveTunes\LiveTunes.csproj">
+    <ProjectReference Include="..\WP8\WP8.csproj">
       <Project>{33ef96c1-3ed1-4ad2-b06f-d2f06cc4e53e}</Project>
-      <Name>LiveTunes</Name>
+      <Name>WP8</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
