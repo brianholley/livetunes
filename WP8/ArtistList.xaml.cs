@@ -26,9 +26,7 @@ namespace LiveTunes
             {
                 App.ViewModel.ConcertDBMutex.WaitOne();
 
-                var artists = from ArtistItem artist in App.ViewModel.ConcertDB.Artists
-                              orderby artist.ArtistName
-                              select artist;
+	            var artists = App.ViewModel.ConcertDB.Artists.OrderBy(a => a.ArtistName);
                 foreach (var artist in artists)
                     App.ViewModel.Artists.Add(artist);
 

@@ -396,9 +396,7 @@ namespace LiveTunes
                 System.Diagnostics.Debug.WriteLine("Started all concerts count query at {0}", DateTime.Now);
                 ConcertDBMutex.WaitOne();
 
-                allConcertCount = (from ConcertItem concert in ConcertDB.Concerts
-                              where concert.Cancelled == false && concert.StartTime.Date >= DateTime.Now.Date
-                              select concert.ConcertId).Count();
+	            allConcertCount = ConcertDB.Concerts.Count(c => !c.Cancelled && c.StartTime.Date >= DateTime.Today);
 
                 ConcertDBMutex.ReleaseMutex();
                 System.Diagnostics.Debug.WriteLine("Finished all concerts count query at {0}", DateTime.Now);
@@ -415,11 +413,7 @@ namespace LiveTunes
                     System.Diagnostics.Debug.WriteLine("Started all concerts query at {0}", DateTime.Now);
                     ConcertDBMutex.WaitOne();
 
-                    var results = from ConcertItem concert in ConcertDB.Concerts
-                                  where concert.Cancelled == false && concert.StartTime.Date >= DateTime.Now.Date
-                                  orderby concert.Headliner.ArtistName
-                                  select concert;
-                    allConcerts = new List<ConcertItem>(results);
+					allConcerts = ConcertDB.Concerts.Where(c => !c.Cancelled && c.StartTime.Date >= DateTime.Today).OrderBy(c => c.Headliner.ArtistName).ToList();
 
                     ConcertDBMutex.ReleaseMutex();
                     System.Diagnostics.Debug.WriteLine("Finished all concerts query at {0}", DateTime.Now);
@@ -442,11 +436,7 @@ namespace LiveTunes
                 System.Diagnostics.Debug.WriteLine("Started tonight query at {0}", DateTime.Now);
                 ConcertDBMutex.WaitOne();
                 
-                var results = from ConcertItem concert in ConcertDB.Concerts
-                              where concert.Ignore == false && concert.Cancelled == false && concert.StartTime.Date == DateTime.Now.Date
-                              orderby concert.StartTime
-                              select concert;
-                tonight = new List<ConcertItem>(results);
+				tonight = ConcertDB.Concerts.Where(c => !c.Ignore && !c.Cancelled && c.StartTime.Date == DateTime.Today).OrderBy(c => c.StartTime).ToList();
 
                 ConcertDBMutex.ReleaseMutex();
                 System.Diagnostics.Debug.WriteLine("Finished tonight query at {0}", DateTime.Now);
@@ -502,10 +492,8 @@ namespace LiveTunes
             ConcertDBMutex.WaitOne();
 
             // Keep any that were from today (we don't want to GC them if they're in progress or the time was "doors open")
-            var oldConcerts = from ConcertItem concert in ConcertDB.Concerts
-                              where concert.StartTime.Date < DateTime.Now.Date
-                              select concert;
-            if (oldConcerts.Count() > 0)
+	        var oldConcerts = ConcertDB.Concerts.Where(c => c.StartTime.Date < DateTime.Today);
+            if (oldConcerts.Any())
             {
                 foreach (var concert in oldConcerts)
                 {
@@ -529,8 +517,7 @@ namespace LiveTunes
             {
                 ConcertDBMutex.WaitOne();
 
-                var allArtists = from ArtistItem artist in ConcertDB.Artists select artist;
-                artistsInDB = new List<ArtistItem>(allArtists);
+                artistsInDB = ConcertDB.Artists.ToList();
 
                 ConcertDBMutex.ReleaseMutex();
             }
@@ -571,14 +558,12 @@ namespace LiveTunes
                 {
                     ConcertDBMutex.WaitOne();
 
-                    var allArtists = from ArtistItem artist in ConcertDB.Artists select artist;
-
-                    foreach (var localArtist in localArtists)
+                    var allArtists = ConcertDB.Artists.ToDictionary(a => a.ArtistName);
+					foreach (var localArtist in localArtists)
                     {
-                        if (allArtists.FirstOrDefault(a => a.ArtistName == localArtist.ArtistName) == null)
+                        if (!allArtists.ContainsKey(localArtist.ArtistName))
                             ConcertDB.Artists.InsertOnSubmit(localArtist);
                     }
-
                     ConcertDB.SubmitChanges();
 
                     ConcertDBMutex.ReleaseMutex();

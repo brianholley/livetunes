@@ -35,22 +35,19 @@ namespace LiveTunes
         public void DumpAllArtists()
         {
             System.Diagnostics.Debug.WriteLine("=== Artists ===");
-            var artists = from ArtistItem artist in Artists select artist;
-            foreach (var artist in artists)
+            foreach (var artist in Artists)
                 System.Diagnostics.Debug.WriteLine(artist.ArtistId + " = " + artist.ArtistName);
         }
         public void DumpAllVenues()
         {
             System.Diagnostics.Debug.WriteLine("=== Venues ===");
-            var venues = from VenueItem venue in Venues select venue;
-            foreach (var venue in venues)
+            foreach (var venue in Venues)
                 System.Diagnostics.Debug.WriteLine(venue.VenueId + " = " + venue.VenueName + "(" + venue.Street + ", " + venue.City + ")");
         }
         public void DumpAllTags()
         {
             System.Diagnostics.Debug.WriteLine("=== Tags ===");
-            var tags = from TagItem tag in Tags select tag;
-            foreach (var tag in tags)
+            foreach (var tag in Tags)
                 System.Diagnostics.Debug.WriteLine(tag.TagId + " = " + tag.Tag);
         }
     }

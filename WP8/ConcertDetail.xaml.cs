@@ -27,9 +27,7 @@ namespace LiveTunes
             {
                 App.ViewModel.ConcertDBMutex.WaitOne();
 
-                var concerts = from ConcertItem concert in App.ViewModel.ConcertDB.Concerts 
-                               where concert.ConcertId == AppCache.CurrentConcertId 
-                               select concert;
+	            var concerts = App.ViewModel.ConcertDB.Concerts.Where(c => c.ConcertId == AppCache.CurrentConcertId);
                 App.ViewModel.CurrentConcert = concerts.First();
 
                 App.ViewModel.ConcertDBMutex.ReleaseMutex();
