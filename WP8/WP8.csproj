@@ -117,6 +117,7 @@
       <DependentUpon>ConcertDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="ConcertListings.cs" />
+    <Compile Include="ConcertListingsParser.cs" />
     <Compile Include="Databinding.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="MainPage.xaml.cs">
