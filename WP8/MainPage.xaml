@@ -14,10 +14,10 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="False">
+    shell:SystemTray.IsVisible="True">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+	<Grid x:Name="LayoutRoot" Background="#005999" >
         <Grid.Resources>
             <!--<utils:Strings x:Key="LocStrings" />-->
             <utils:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
@@ -33,7 +33,7 @@
             <RowDefinition Height="80" />
         </Grid.RowDefinitions>
 
-        <controls:Pivot Title="livetunes" Grid.Row="0" Background="#005999" Name="MainPivot">
+        <controls:Pivot Title="livetunes" Grid.Row="0" Name="MainPivot">
 
             <!--{Binding Source={StaticResource LocStrings}, Path=NowPlaying_Title}-->
             <controls:PivotItem Header="now playing" Visibility="{Binding NowPlaying, Converter={StaticResource NullVisibilityConverter}}">

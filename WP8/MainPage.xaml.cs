@@ -1,18 +1,13 @@
 ﻿#define USE_TEST_ADS
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
-using Microsoft.Xna.Framework.Media;
+using Microsoft.Phone.Tasks;
 
 namespace LiveTunes
 {
@@ -22,10 +17,10 @@ namespace LiveTunes
         public MainPage()
         {
             InitializeComponent();
-
+			
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
-            this.Loaded += new RoutedEventHandler(MainPage_Loaded);
+			this.Loaded += new RoutedEventHandler(MainPage_Loaded);
 
             Settings.Load();
 
@@ -38,7 +33,7 @@ namespace LiveTunes
 #endif
 
 #if DEBUG
-            this.DbgSyncButton.Visibility = System.Windows.Visibility.Visible;
+            this.DbgSyncButton.Visibility = Visibility.Visible;
 #endif
         }
 
@@ -72,14 +67,14 @@ namespace LiveTunes
 
         private void LastFmLogo_Tap(object sender, GestureEventArgs e)
         {
-            new Microsoft.Phone.Tasks.WebBrowserTask() { Uri = new Uri("http://www.last.fm") }.Show();
+            new WebBrowserTask() { Uri = new Uri("http://www.last.fm") }.Show();
         }
 
         private void RateButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                new Microsoft.Phone.Tasks.MarketplaceDetailTask().Show();
+                new MarketplaceDetailTask().Show();
             }
             catch (InvalidOperationException)
             {

@@ -70,7 +70,13 @@ namespace LiveTunes
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
-        {
+		{
+			Uri rootUri = new Uri("/MainPage.xaml", UriKind.Relative);
+	        if (!AppCache.CompletedFirstRun)
+	        {
+				rootUri = new Uri("/NewFeatures.xaml", UriKind.Relative);
+	        }
+			RootFrame.Navigate(rootUri);
         }
 
         // Code to execute when the application is activated (brought to foreground)
