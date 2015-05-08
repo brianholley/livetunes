@@ -39,6 +39,8 @@ namespace LiveTunes
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+	        NavigationService.RemoveBackEntry();
+
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();

@@ -44,7 +44,7 @@
 				<phone:PivotItem>
 					<StackPanel>
 						<TextBlock HorizontalAlignment="Center">Page 4</TextBlock>
-						<HyperlinkButton>Let's Get Started!</HyperlinkButton>
+						<HyperlinkButton NavigateUri="/MainPage.xaml">Let's Get Started!</HyperlinkButton>
 					</StackPanel>
 				</phone:PivotItem>
 			</phone:Pivot>
