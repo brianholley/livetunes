@@ -31,7 +31,7 @@ namespace LiveTunes
             _connectionString = dbConnectionString;
 
             this.MyConcerts = new ObservableCollection<ConcertItem>();
-            this.AllConcerts = new ObservableCollection<ConcertItem>();
+            this.AllConcerts = new ObservableCollection<ConcertGroup>();
             this.Tonight = new ObservableCollection<ConcertItem>();
             this.Artists = new ObservableCollection<ArtistItem>();
         }
@@ -65,8 +65,16 @@ namespace LiveTunes
 
         #endregion
 
+		public class ConcertGroup : ObservableCollection<ConcertItem>
+		{
+			public ConcertGroup() { }
+			public ConcertGroup(IEnumerable<ConcertItem> items) : base(items) { }
+
+			public string Key { get; set; }
+		}
+
         public ObservableCollection<ConcertItem> MyConcerts { get; private set; }
-        public ObservableCollection<ConcertItem> AllConcerts { get; private set; }
+        public ObservableCollection<ConcertGroup> AllConcerts { get; private set; }
         public ObservableCollection<ConcertItem> Tonight { get; private set; }
 
         public ObservableCollection<ArtistItem> Artists { get; private set; }
@@ -423,8 +431,27 @@ namespace LiveTunes
                 {
                     IsLoadingMy = IsLoadingTonight = IsLoadingAll = false;
                     AllConcerts.Clear();
-                    foreach (var concert in allConcerts)
-                        AllConcerts.Add(concert);
+	                foreach (var group in allConcerts.GroupBy(c => c.Headliner.ArtistName.Substring(0, 1).ToUpperInvariant()))
+	                {
+		                int throwawayInt;
+		                string key = int.TryParse(group.Key, out throwawayInt) ? "#" : group.Key;
+
+		                AllConcerts.Add(new ConcertGroup(group) {Key = key});
+	                }
+
+					// TODO: Loc of other language groups?
+	                if (AllConcerts.Count < 27)
+	                {
+		                int group = 0;
+		                for (int i = 0; i < 26; i++, group++)
+		                {
+			                string key = ((char) ('A' + i)).ToString();
+			                if (group >= AllConcerts.Count || AllConcerts[group].Key != key)
+							{
+								AllConcerts.Insert(group, new ConcertGroup() { Key = key });
+							}
+		                }
+	                }
                 });
             }
         }

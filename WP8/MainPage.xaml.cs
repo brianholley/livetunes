@@ -54,18 +54,36 @@ namespace LiveTunes
 
             // Add the all concerts list box to the tombstoning service - we never need to pop this (we'll always serialize that scroll pos)
             if (AppCache.AllConcertsListScrollPos != 0)
-                ((VisualTreeHelper.GetChild(AllConcertsListBox, 0) as FrameworkElement).FindName("ScrollViewer") as ScrollViewer).ScrollToVerticalOffset(AppCache.AllConcertsListScrollPos);
+                ((VisualTreeHelper.GetChild(AllConcertsListSelector, 0) as FrameworkElement).FindName("ScrollViewer") as ScrollViewer).ScrollToVerticalOffset(AppCache.AllConcertsListScrollPos);
             AppCache.AllConcertsListScrollPos = 0;
-            TombstoningService.PushListBox(AllConcertsListBox, (double pos) => { AppCache.AllConcertsListScrollPos = pos; });
+			//TombstoningService.PushListBox(AllConcertsListSelector, (double pos) => { AppCache.AllConcertsListScrollPos = pos; });
         }
 
         private void ConcertListBox_Tap(object sender, GestureEventArgs e)
         {
-            App.ViewModel.CurrentConcert = (sender as ListBox).SelectedItem as ConcertItem;
-            AppCache.CurrentConcertId = App.ViewModel.CurrentConcert.ConcertId;
-
-            NavigationService.Navigate(new Uri("/ConcertDetail.xaml", UriKind.Relative));
+			NavigateToConcert((sender as ListBox).SelectedItem as ConcertItem);
         }
+
+		private void AllConcertsListSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (e.AddedItems.Count > 0)
+			{
+				var concert = e.AddedItems[0] as ConcertItem;
+				if (concert != null)
+				{
+					NavigateToConcert(concert);
+					(sender as LongListSelector).SelectedItem = null;
+				}
+			}
+		}
+
+	    private void NavigateToConcert(ConcertItem concert)
+	    {
+		    App.ViewModel.CurrentConcert = concert;
+			AppCache.CurrentConcertId = concert.ConcertId;
+
+			NavigationService.Navigate(new Uri("/ConcertDetail.xaml", UriKind.Relative));
+	    }
 
         private void LastFmLogo_Tap(object sender, GestureEventArgs e)
         {
