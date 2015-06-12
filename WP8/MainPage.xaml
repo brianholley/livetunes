@@ -152,42 +152,6 @@
 				</Grid>
             </controls:PivotItem>
 
-            <controls:PivotItem Header="settings">
-                <StackPanel>
-                    <Grid Margin="12,20,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="140" />
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0" Text="show events within:" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                        <TextBox Grid.Column="1" Text="{Binding Distance}" HorizontalAlignment="Stretch" Width="Auto" InputScope="TelephoneNumber" LostFocus="DistanceTextBox_LostFocus" VerticalAlignment="Center" />
-                        <Button Grid.Column="2" Content="{Binding DistanceUnitsString}" HorizontalAlignment="Right" Click="UnitsButton_Click" VerticalAlignment="Center" />
-
-                        <TextBlock Grid.Row="1" Text="last synced:" VerticalAlignment="Center" />
-                        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding LastSyncTime}" Margin="12,0,0,0" Style="{StaticResource PhoneTextNormalStyle}" VerticalAlignment="Center" />
-                    </Grid>
-
-                    <Button Name="DbgSyncButton" Content="sync now" Margin="0,20,0,0" Visibility="Collapsed" Click="DbgSyncButton_Click" />
-                </StackPanel>
-            </controls:PivotItem>
-
-            <controls:PivotItem Header="about">
-                <Grid>
-                    <TextBlock Text="livetunes (c) 2012 wavecrash software" TextAlignment="Center" />
-                    <StackPanel>
-                        <TextBlock Text="concert listings by" TextAlignment="Center" Margin="0,50,0,0"/>
-                        <Image Source="Images/Last.fm_Logo_White.png" Width="250" Tap="LastFmLogo_Tap" />
-                    </StackPanel>
-                    <Button Content="rate us on the marketplace" VerticalAlignment="Bottom" Click="RateButton_Click" />
-                </Grid>
-            </controls:PivotItem>
-
         </controls:Pivot>
         
         <StackPanel Grid.Row="1" Background="#005999">
@@ -195,4 +159,12 @@
         </StackPanel>
         <my:AdControl Name="MainAdControl" Grid.Row="2" Width="480" Height="80"/>
     </Grid>
+	
+	<phone:PhoneApplicationPage.ApplicationBar>
+		<shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" Mode="Minimized">
+			<shell:ApplicationBarIconButton IconUri="/Images/appbar.refresh.rest.png" Text="Refresh" Click="RefreshAppBarButton_Click"/>
+			<shell:ApplicationBarIconButton IconUri="/Images/appbar.feature.settings.rest.png" Text="Settings" Click="SettingsAppBarButton_Click"/>
+			<shell:ApplicationBarIconButton IconUri="/Images/appbar.questionmark.rest.png" Text="About" Click="AboutAppBarButton_Click"/>
+		</shell:ApplicationBar>
+	</phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

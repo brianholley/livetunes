@@ -31,10 +31,6 @@ namespace LiveTunes
             this.MainAdControl.ApplicationId = "";
             this.MainAdControl.AdUnitId="";
 #endif
-
-#if DEBUG
-            this.DbgSyncButton.Visibility = Visibility.Visible;
-#endif
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -85,23 +81,6 @@ namespace LiveTunes
 			NavigationService.Navigate(new Uri("/ConcertDetail.xaml", UriKind.Relative));
 	    }
 
-        private void LastFmLogo_Tap(object sender, GestureEventArgs e)
-        {
-            new WebBrowserTask() { Uri = new Uri("http://www.last.fm") }.Show();
-        }
-
-        private void RateButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                new MarketplaceDetailTask().Show();
-            }
-            catch (InvalidOperationException)
-            {
-                // User clicked more than once.  That's cool...
-            }
-        }
-
         private void SyncButton_Click(object sender, RoutedEventArgs e)
         {
             App.ViewModel.SyncConcertListings(true);
@@ -110,46 +89,25 @@ namespace LiveTunes
             App.ViewModel.AllConcertsError = "";
         }
 
-        private void DbgSyncButton_Click(object sender, RoutedEventArgs e)
-        {
-            App.ViewModel.SyncConcertListings(true);
-        }
-
         private void ArtistButton_Click(object sender, RoutedEventArgs e)
         {
             AppCache.ArtistListScrollPos = 0;
             NavigationService.Navigate(new Uri("/ArtistList.xaml", UriKind.Relative));
         }
 
-        private void UnitsButton_Click(object sender, RoutedEventArgs e)
-        {
-            App.ViewModel.DistanceUnits = (Settings.Units == DistanceUnits.Miles ? DistanceUnits.Kilometers : DistanceUnits.Miles);
-        }
+		private void RefreshAppBarButton_Click(object sender, EventArgs e)
+		{
+			App.ViewModel.SyncConcertListings(true);
+		}
 
-        private void DistanceTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox unitsBox = sender as TextBox;
-            try
-            {
-                string v = unitsBox.Text;
-                foreach (char c in " -.+*#".ToArray())
-                    v = v.Replace(c.ToString(), "");
+		private void SettingsAppBarButton_Click(object sender, EventArgs e)
+		{
+			NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+		}
 
-                if (v == "")
-                    App.ViewModel.Distance = Settings.DefaultDistance;
-                else
-                    App.ViewModel.Distance = int.Parse(v);
-            }
-            catch (FormatException)
-            {
-                // Entered numbers didn't parse after we tried to clear it up - can't do much about it, keep the old distance value
-                App.ViewModel.Distance = Settings.Distance;
-            }
-            catch (OverflowException)
-            {
-                // User entered too large a number.  Trying to break the app = grrrr.
-                App.ViewModel.Distance = Settings.Distance;
-            }
-        }
+		private void AboutAppBarButton_Click(object sender, EventArgs e)
+		{
+			NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
+		}
     }
 }
