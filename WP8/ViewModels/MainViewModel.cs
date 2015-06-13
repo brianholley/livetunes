@@ -19,6 +19,7 @@ using Microsoft.Xna.Framework.Media;
 using System.IO.IsolatedStorage;
 using System.Threading;
 using System.Data.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 
 namespace LiveTunes
@@ -80,8 +81,8 @@ namespace LiveTunes
         public ObservableCollection<ArtistItem> Artists { get; private set; }
 
         #region Now playing tab data binding properties
-        
-        private Song _nowPlaying;
+
+		private Song _nowPlaying;
         public Song NowPlaying
         {
             get

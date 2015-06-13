@@ -13,7 +13,7 @@ namespace LiveTunes
 
 		private void CloseButton_Click(object sender, RoutedEventArgs e)
 		{
-			Settings.RanFirstRun = true;
+			AppCache.CompletedFirstRun = true;
 		}
 	}
 }

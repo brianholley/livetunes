@@ -17,6 +17,13 @@
     shell:SystemTray.IsVisible="True">
 
 	<phone:PhoneApplicationPage.Resources>
+        <!--<utils:Strings x:Key="LocStrings" />-->
+        <utils:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+        <utils:NullVisibilityConverter x:Key="NullVisibilityConverter" />
+        <utils:StringVisibilityConverter x:Key="StringVisibilityConverter" />
+        <utils:CountVisibilityConverter x:Key="CountVisibilityConverter" />
+        <utils:ErrorVisibilityConverter x:Key="ErrorVisibilityConverter" />
+        
 		<phone:JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
 		<phone:JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
 
@@ -40,14 +47,6 @@
 	</phone:PhoneApplicationPage.Resources>
 	
 	<Grid x:Name="LayoutRoot" Background="#005999" >
-        <Grid.Resources>
-            <!--<utils:Strings x:Key="LocStrings" />-->
-            <utils:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
-            <utils:NullVisibilityConverter x:Key="NullVisibilityConverter" />
-            <utils:StringVisibilityConverter x:Key="StringVisibilityConverter" />
-            <utils:CountVisibilityConverter x:Key="CountVisibilityConverter" />
-            <utils:ErrorVisibilityConverter x:Key="ErrorVisibilityConverter" />
-        </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -57,17 +56,15 @@
 
         <controls:Pivot Title="livetunes" Grid.Row="0" Name="MainPivot">
 
-            <!--{Binding Source={StaticResource LocStrings}, Path=NowPlaying_Title}-->
-            <controls:PivotItem Header="now playing" Visibility="{Binding NowPlaying, Converter={StaticResource NullVisibilityConverter}}">
-                <StackPanel>
-                    <TextBlock Text="{Binding NowPlaying.Artist.Name}" Style="{StaticResource PhoneTextExtraLargeStyle}" />
-                    <TextBlock Text="{Binding NowPlaying.Album.Name}" Style="{StaticResource PhoneTextLargeStyle}" />
-                    <Image Width="256" Height="256" Source="{Binding NowPlayingArt}" HorizontalAlignment="Left" />
-                    <TextBlock Text="{Binding NowPlaying.Name}" Style="{StaticResource PhoneTextLargeStyle}" />
-                </StackPanel>
-            </controls:PivotItem>
+			<phone:Pivot.HeaderTemplate>
+				<DataTemplate>
+					<Grid>
+						<TextBlock Text="{Binding}" FontSize="32" />
+					</Grid>
+				</DataTemplate>
+			</phone:Pivot.HeaderTemplate>
 
-            <controls:PivotItem Header="my concerts">
+			<controls:PivotItem Header="my concerts">
                 <Grid>
                     <ScrollViewer>
                         <StackPanel>
@@ -162,6 +159,7 @@
 	
 	<phone:PhoneApplicationPage.ApplicationBar>
 		<shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" Mode="Minimized">
+			<shell:ApplicationBarIconButton IconUri="/Images/appbar.cancel.rest.png" Text="Now Playing" IsEnabled="False" Click="NowPlayingAppBarButton_Click"/>
 			<shell:ApplicationBarIconButton IconUri="/Images/appbar.refresh.rest.png" Text="Refresh" Click="RefreshAppBarButton_Click"/>
 			<shell:ApplicationBarIconButton IconUri="/Images/appbar.feature.settings.rest.png" Text="Settings" Click="SettingsAppBarButton_Click"/>
 			<shell:ApplicationBarIconButton IconUri="/Images/appbar.questionmark.rest.png" Text="About" Click="AboutAppBarButton_Click"/>

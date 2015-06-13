@@ -134,6 +134,9 @@
     <Compile Include="NewFeatures.xaml.cs">
       <DependentUpon>NewFeatures.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NowPlayingPage.xaml.cs">
+      <DependentUpon>NowPlayingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PivotPageDotIndicator.xaml.cs">
       <DependentUpon>PivotPageDotIndicator.xaml</DependentUpon>
     </Compile>
@@ -182,6 +185,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="NewFeatures.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NowPlayingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

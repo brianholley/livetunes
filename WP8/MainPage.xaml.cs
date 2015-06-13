@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 
 namespace LiveTunes
@@ -17,10 +18,10 @@ namespace LiveTunes
         public MainPage()
         {
             InitializeComponent();
-			
-            // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
+			
 			this.Loaded += new RoutedEventHandler(MainPage_Loaded);
+	        Loaded += (sender, args) => { ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).IsEnabled = (App.ViewModel.NowPlaying != null); };
 
             Settings.Load();
 
@@ -94,6 +95,11 @@ namespace LiveTunes
             AppCache.ArtistListScrollPos = 0;
             NavigationService.Navigate(new Uri("/ArtistList.xaml", UriKind.Relative));
         }
+
+		private void NowPlayingAppBarButton_Click(object sender, EventArgs e)
+		{
+			NavigationService.Navigate(new Uri("/NowPlayingPage.xaml", UriKind.Relative));
+		}
 
 		private void RefreshAppBarButton_Click(object sender, EventArgs e)
 		{
