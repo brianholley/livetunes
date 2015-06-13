@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using Microsoft.Phone.Controls;
 
 namespace LiveTunes
@@ -8,6 +9,11 @@ namespace LiveTunes
 		public NewFeatures()
 		{
 			InitializeComponent();
+		}
+
+		private void CloseButton_Click(object sender, RoutedEventArgs e)
+		{
+			Settings.RanFirstRun = true;
 		}
 	}
 }
